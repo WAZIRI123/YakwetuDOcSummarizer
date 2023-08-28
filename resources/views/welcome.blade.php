@@ -332,22 +332,45 @@ function uploadAndUpdateBot() {
             headers:  headers
         })
   .then(response=> {
-
+    const imageUrl = response.data.image_url;
     axios.get(apiUrl, {
     headers: {
         'Authorization': `Bearer ${authToken}`
     }
 })
+
+
 .then(response => {
     const existingPayload = response.data;
-    console.log(response.data)
-    // This is the existing payload
-    axios.put(`https://developers.sarufi.io/chatbot/2007`, updatedPayload,  {headers: {
+    const updatedPayload = {
+  ...existingPayload,
+  data_urls: [imageUrl] // Replace the empty array with the image URL
+};
+
+    axios.put(`https://developers.sarufi.io/chatbot/2012`, updatedPayload,  {headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${authToken}`
                         }},)
     .then(response => {
-        console.log(response.data);
+        console.log(response)
+        const requestBody = {
+                    chat_id: '1',
+                    bot_id: '2012',
+                    message: 'summarize'
+                };
+        axios.post('https://developers.sarufi.io/conversation', requestBody, {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+    }
+})
+.then(response => {
+   
+    console.log(response);
+})
+.catch(error => {
+    console.error('Error:', error);
+});
     })
     .catch(error => {
         console.error("Error:", error);
