@@ -333,7 +333,7 @@ function uploadAndUpdateBot() {
         })
   .then(response=> {
 
-    axios.get(`https://developers.sarufi.io/chatbot/2007`, {
+    axios.get(apiUrl, {
     headers: {
         'Authorization': `Bearer ${authToken}`
     }
